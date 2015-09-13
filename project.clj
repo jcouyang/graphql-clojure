@@ -6,7 +6,8 @@
   :dependencies [[org.clojure/clojure "1.7.0"]
                  [org.clojure/core.typed "0.3.11"]
                  [org.clojure/core.match "0.3.0-alpha4"]
-                 [reduce-fsm "0.1.3"]]
+                 [reduce-fsm "0.1.3"]
+                 [org.clojure/tools.trace "0.7.8"]]
   :main ^:skip-aot graphql.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})

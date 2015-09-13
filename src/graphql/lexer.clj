@@ -126,5 +126,11 @@
                :value (subs ql start end)})
       )))
 
-(defn read [ql]
-  (make-token ql 0))
+(defn read
+  ([ql] (read ql 0))
+  ([ql pos] (if (>= pos (count ql))
+              {:kind (:EOF token-kind)
+               :start pos
+               :end pos
+               :value nil}
+              (make-token ql pos))))
