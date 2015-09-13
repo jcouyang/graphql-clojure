@@ -67,6 +67,16 @@
    [:end
     _ -> :end]])
 
+(defn- read-number [ql pos]
+  (let [body (subs ql pos)
+        matched-int (re-find #"^-?(0|[1-9][0-9]*)" body)
+        matched-float (re-find #"^-?(0|[1-9][0-9]*)(\.[0-9]+)?((E|e)(\+|\-)?[0-9]+)?" body)
+        count-int (count (first matched-int))
+        count-float (count (first matched-float))]
+    (if (= count-int count-float)
+      [(+ pos count-int) (token-kind :INT)]
+      [(+ pos count-float) (token-kind :FLOAT)])))
+
 (defn make-token [ql pos]
   (let [qlchars (vec (char-array ql))
         start (end-of-whitespace ql pos)
@@ -77,6 +87,12 @@
                         :start start
                         :end end
                         :value (read-string (subs ql start end))})
+      (or (= \- current) (and (>= (int current) 48) (<= (int current) 57)))
+      (let [[end type] (read-number ql start)]
+                       {:kind type
+                        :start start
+                        :end end
+                        :value (subs ql start end)})
       :else (let [end (end-of ql start read-name)]
               {:kind (:NAME token-kind)
                :start start

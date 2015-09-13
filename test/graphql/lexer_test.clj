@@ -11,7 +11,6 @@
             :start 5
             :end 8
             :value "foo"}))
-    
     (is (= (lexer/read "#comment
                       foo#comment")
            {:kind 15
@@ -43,4 +42,67 @@
            {:kind (lexer/token-kind :STRING)
             :start 0
             :end 34
-            :value "unicode \u1234\u5678\u90AB\uCDEF"}))))
+            :value "unicode \u1234\u5678\u90AB\uCDEF"})))
+  (testing "number"
+    (is (= (lexer/read "4")
+           {:kind (lexer/token-kind :INT)
+            :start 0
+            :end 1
+            :value "4"}))
+    (is (= (lexer/read "4.123")
+           {:kind (lexer/token-kind :FLOAT)
+            :start 0
+            :end 5
+            :value "4.123"}))
+    (is (= (lexer/read "-4")
+           {:kind (lexer/token-kind :INT)
+            :start 0
+            :end 2
+            :value "-4"}))
+    (is (= (lexer/read "9")
+           {:kind (lexer/token-kind :INT)
+            :start 0
+            :end 1
+            :value "9"}))
+    (is (= (lexer/read "0")
+           {:kind (lexer/token-kind :INT)
+            :start 0
+            :end 1
+            :value "0"}))
+    (is (= (lexer/read "-4.123")
+           {:kind (lexer/token-kind :FLOAT)
+            :start 0
+            :end 6
+            :value "-4.123"}))
+    (is (= (lexer/read "0.123")
+           {:kind (lexer/token-kind :FLOAT)
+            :start 0
+            :end 5
+            :value "0.123"}))
+    (is (= (lexer/read "123E4")
+           {:kind (lexer/token-kind :FLOAT)
+            :start 0
+            :end 5
+            :value "123E4"}))
+    (is (= (lexer/read "123e-4")
+           {:kind (lexer/token-kind :FLOAT)
+            :start 0
+            :end 6
+            :value "123e-4"}))
+    (is (= (lexer/read "123e+4")
+           {:kind (lexer/token-kind :FLOAT)
+            :start 0
+            :end 6
+            :value "123e+4"}))
+    (is (= (lexer/read "-1.123e4")
+           {:kind (lexer/token-kind :FLOAT)
+            :start 0
+            :end 8
+            :value "-1.123e4"}))
+    (is (= (lexer/read "-1.123e4567")
+           {:kind (lexer/token-kind :FLOAT)
+            :start 0
+            :end 11
+            :value "-1.123e4567"}))
+    
+    ))
