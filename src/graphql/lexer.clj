@@ -2,6 +2,7 @@
   (:require [clojure.core.match :refer [match]]
             [reduce-fsm :as fsm]))
 
+
 (def token-kind
   {:EOF 1
    :BANG 2
@@ -22,6 +23,20 @@
    :INT 17
    :FLOAT 18
    :STRING 19})
+
+(def mapping-kind
+  {\! (token-kind :BANG)
+   \$ (token-kind :DOLLAR)
+   \( (token-kind :PAREN_L)
+   \) (token-kind :PAREN_R)
+   \: (token-kind :COLON)
+   \= (token-kind :EQUALS)
+   \@ (token-kind :AT)
+   \[ (token-kind :BRACKET_L)
+   \] (token-kind :BRACKET_R)
+   \{ (token-kind :BRACE_L)
+   \} (token-kind :BRACE_R)
+   \| (token-kind :PIPE)})
 
 (defn- end-of [body pos f]
   (reduce f pos (seq (char-array (subs body pos)))))
@@ -93,6 +108,17 @@
                         :start start
                         :end end
                         :value (subs ql start end)})
+      (some #{current} '(\! \$ \( \) \: \= \@ \[ \] \{ \} \|))
+      {:kind (mapping-kind current)
+       :start start
+       :end (inc start)
+       :value nil}
+      (= \. current) (if (and (= \. (qlchars (+ 2 pos))) (= \. (qlchars (inc pos))))
+                       {:kind (token-kind :SPREAD)
+                        :start start
+                        :end (+ 3 start)
+                        :value nil}
+                       :error)
       :else (let [end (end-of ql start read-name)]
               {:kind (:NAME token-kind)
                :start start

@@ -103,6 +103,71 @@
            {:kind (lexer/token-kind :FLOAT)
             :start 0
             :end 11
-            :value "-1.123e4567"}))
-    
+            :value "-1.123e4567"})))
+  (testing "punctuation"
+    (is (= (lexer/read "!")
+           {:kind (lexer/token-kind :BANG)
+            :start 0
+            :end 1
+            :value nil}))
+    (is (= (lexer/read "$")
+           {:kind (lexer/token-kind :DOLLAR)
+            :start 0
+            :end 1
+            :value nil}))
+    (is (= (lexer/read "(")
+           {:kind (lexer/token-kind :PAREN_L)
+            :start 0
+            :end 1
+            :value nil}))
+    (is (= (lexer/read ")")
+           {:kind (lexer/token-kind :PAREN_R)
+            :start 0
+            :end 1
+            :value nil}))
+    (is (= (lexer/read "...")
+           {:kind (lexer/token-kind :SPREAD)
+            :start 0
+            :end 3
+            :value nil}))
+    (is (= (lexer/read ":")
+           {:kind (lexer/token-kind :COLON)
+            :start 0
+            :end 1
+            :value nil}))
+    (is (= (lexer/read "=")
+           {:kind (lexer/token-kind :EQUALS)
+            :start 0
+            :end 1
+            :value nil}))
+    (is (= (lexer/read "@")
+           {:kind (lexer/token-kind :AT)
+            :start 0
+            :end 1
+            :value nil}))
+    (is (= (lexer/read "[")
+           {:kind (lexer/token-kind :BRACKET_L)
+            :start 0
+            :end 1
+            :value nil}))
+    (is (= (lexer/read "]")
+           {:kind (lexer/token-kind :BRACKET_R)
+            :start 0
+            :end 1
+            :value nil}))
+    (is (= (lexer/read "{")
+           {:kind (lexer/token-kind :BRACE_L)
+            :start 0
+            :end 1
+            :value nil}))
+    (is (= (lexer/read "}")
+           {:kind (lexer/token-kind :BRACE_R)
+            :start 0
+            :end 1
+            :value nil}))
+    (is (= (lexer/read "|")
+           {:kind (lexer/token-kind :PIPE)
+            :start 0
+            :end 1
+            :value nil}))
     ))
